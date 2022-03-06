@@ -23,7 +23,8 @@ NatController pump3(pump3Pin,"PUMP3");
 unsigned int interval_on = 5; 
 unsigned int interval_off = 5;
 
-const unsigned int MAX_MESSAGE_LENGTH = 12;
+
+const unsigned int MAX_MESSAGE_LENGTH = 64;
 
 void setup() {
   Serial.begin(115200);
@@ -81,6 +82,12 @@ void loop() {
   Serial.print(pump1.mode);
   Serial.print(" S1 State: ");
   Serial.print(pump1.state);
+  Serial.print(" S1 autoValue: ");
+  Serial.print(pump1.autoValue);
+  Serial.print(" S1 autoMin: ");
+  Serial.print(pump1.autoMin);
+  Serial.print(" S1 autoMax: ");
+  Serial.print(pump1.autoMax);
   Serial.print(" S3 Mode: ");
   Serial.print(pump3.mode);
   Serial.print(" S3 State: ");
@@ -92,58 +99,100 @@ void loop() {
 }
 
 void checkSerialInput() {
-while (Serial.available() > 0) {
-   //Create a place to hold the incoming message
-   static char message[MAX_MESSAGE_LENGTH];
-   static unsigned int message_pos = 0;
+  while (Serial.available() > 0) {
+  //Create a place to hold the incoming message
+    static char message[MAX_MESSAGE_LENGTH];
+    static unsigned int message_pos = 0;
+    String command;
+    String commandValue;
+    int secondParamIndex;
+    //Read the next available byte in the serial receive buffer
+    char inByte = Serial.read();
 
-   //Read the next available byte in the serial receive buffer
-   char inByte = Serial.read();
-
-   //Message coming in (check not terminating character) and guard for over message size
-   if ( inByte != '\n' && (message_pos < MAX_MESSAGE_LENGTH - 1) )
-   {
-     //Add the incoming byte to our message
-     message[message_pos] = inByte;
-     message_pos++;
-   }
-   //Full message received...
-   else
-   {
-     //Add null character to string
-     message[message_pos] = '\0';
-     Serial.println(message);
-     int number = atoi(message);
-     //Print the message (or do other things)
-     if(number == 1) {
-      pump1.mode = MODE_ON;
-     }
-     else if(number == 2) {
-      pump1.mode = MODE_OFF;
-     }
-     else if (number == 5) {
-      pump1.mode = MODE_INT;
-      pump1.startIntervalMode();
-     }
-     else if(number == 11) {
-      pump3.mode = MODE_ON;
-     }
-     else if(number == 12) {
-      pump3.mode = MODE_OFF;
-     }
-     else if (number == 15) {
-      pump3.mode = MODE_INT;
-      pump3.startIntervalMode();
-     }
-     else {
-      pump1.mode = MODE_OFF;
-      pump3.mode = MODE_OFF;
-     }
+    //Message coming in (check not terminating character) and guard for over message size
+    if ( inByte != '\n' && (message_pos < MAX_MESSAGE_LENGTH - 1) ) {
+      //Add the incoming byte to our message
+      message[message_pos] = inByte;
+      message_pos++;
+    }
+    //Full message received...
+    else {
+      //Add null character to string
+      message[message_pos] = '\0';
+      Serial.println(message);
      
-     Serial.println(pump1.mode);
-     Serial.println(pump3.mode);
+      command = String(message);
+      secondParamIndex = command.indexOf(' ');
+      commandValue = command.substring(secondParamIndex+1);
+      command = command.substring(0,secondParamIndex);
+
+      Serial.print("String command: ");
+      Serial.println(command);
+      Serial.print("String commandValue: ");
+      Serial.println(commandValue);
+
+      int number = 0;
+     
+      //Print the message (or do other things)
+      if(command == "mode") {
+        number = commandValue.toInt();
+        if(number == 11) {
+          pump1.mode = MODE_ON;
+        }
+        else if(number == 10) {
+          pump1.mode = MODE_OFF;
+        }
+        else if(number == 14) {
+        //pump1.mode = MODE_AUTO;
+          pump1.startAutoMode();
+        }
+        else if (number == 15) {
+          pump1.mode = MODE_INT;
+          pump1.startIntervalMode();
+        }
+        else if(number == 31) {
+          pump3.mode = MODE_ON;
+        }
+        else if(number == 30) {
+          pump3.mode = MODE_OFF;
+        }
+        else if(number == 34) {
+          pump3.startAutoMode();
+        }
+        else if (number == 35) {
+          pump3.mode = MODE_INT;
+          pump3.startIntervalMode();
+        }
+        else {
+          pump1.mode = MODE_OFF;
+          pump3.mode = MODE_OFF;
+        }
+        Serial.print("Pump 1 Mode: ");
+        Serial.println(pump1.mode);
+      }
+      
+      else if (command == "autovalue1") {
+        pump1.autoValue = commandValue.toFloat();
+        Serial.print("Pump 1 autoValue: ");
+        Serial.println(pump1.autoValue);
+      }
+      
+      else if (command == "automin1") {
+        pump1.autoMin = commandValue.toFloat();
+        Serial.print("Pump 1 autoMin: ");
+        Serial.println(pump1.autoMin);
+      }
+      
+      else if (command == "automax1") {
+        pump1.autoMax = commandValue.toFloat();
+        Serial.print("Pump 1 autoMax: ");
+        Serial.println(pump1.autoMax);
+      }
+
+     
+     //Serial.println(pump3.mode);
      //Reset for the next message
-     message_pos = 0;
+      message_pos = 0;
    }
  }
 }

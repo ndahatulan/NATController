@@ -19,26 +19,78 @@ NatController::NatController(uint8_t pinControl, String c_name) {
 
 void NatController::loop() {
   if (enable) {
-    if(mode == MODE_ON) { // ON
+    /* MODE ON - 1*/
+    if(mode == MODE_ON) {
         if(!state) {
           turnOn();
           needModePublish = true;
           //
         }
     }
-    else if(mode == MODE_OFF) { //OFF
+    /* MODE OFF - 0*/
+    else if(mode == MODE_OFF) {
       if(state) {
          turnOff();
          needModePublish = true;
          // Do here after off
       }
     }
-    else if(mode == MODE_INT) { // INTERVAL
+    /* MODE AUTO - 4*/
+    else if(mode == MODE_AUTO) {
+      if(autoValue <= autoMin && state == false) { // if autoValue is out of range and state is off
+        if (!(autoMin == autoMax && autoValue == autoMin)) { // automin, automax and autovalue should not be equal
+          if(_autoDelay == false) { // Start delay
+            _autoDelayStartMillis = millis(); // Start timer for delay
+            _autoDelay = true; // Set PumpDelay state to true
+            Serial.println("_autoDelay true");
+          }
+      
+          if(_autoDelay == true && millis()-_autoDelayStartMillis >= autoDelayStart*1000) { // If delay state is true and already reached the delay timer
+            turnOn();
+            Serial.println("S1 turned ON");
+            // publishPumpState();
+            _autoDelay = false;
+          }
+        }
+      }
+      else if(autoValue > autoMin && state == false) {
+        _autoDelay = false;
+      }
+      else if(autoValue >= autoMax && state == true) {
+        turnOff();
+        Serial.println("S1 turned OFF");
+        Serial.print("_autoDelay: ");
+        Serial.println(_autoDelay);
+        //pump1.offPump();
+        //publishPumpState();
+        //pump1ProperOff();
+        //Serial.println("");
+        //Serial.print("Dispensed: "); 
+        //Serial.println(pump1.getDispensed());
+        // Send pump dispense if required
+        
+      }
+  
+      if (state == true) { // If already reached maximum pump time, turn off PUMP
+        if (getDuration() >= autoTimeMax*1000) {
+          mode == MODE_OFF;
+         // settings.PUMP1_MODE = PUMP1_MODE_OFF;
+         // pump1ProperOff();
+          //globalconfig.settingsDoc["PUMP1_MODE"] = settings.PUMP1_MODE;
+          //globalconfig.save();
+          //Serial.println("");
+          //Serial.print("Dispensed: "); 
+          //Serial.println(pump1.getDispensed());
+          // Send pump dispensed if required
+          
+        }
+      }
+    }
+    /* MODE INTERVAL - 5*/
+    else if(mode == MODE_INT) {
       if(_intervalCount > 0) { // When switching to interval state. Initial _intervalCount should be 0
         if((_intervalCount % 2) != 0) {   // _intervalCount is odd, odd - on state
           if(getIntervalDuration() >= intervalOn) {
-          //if(getIntervalDuration() >= ptr_interval_on) {
-            // Do here after 
             turnOff();
             needModePublish = true;
             _intervalMillis = millis(); 
@@ -70,9 +122,13 @@ void NatController::loop() {
           needModePublish = true;
           _intervalCount++;
         }
-        
       }
     }
+    /* MODE VALUE not on the option*/
+    else {
+      mode == MODE_OFF;
+    }
+
   }
   else {
     if(mode != MODE_OFF) {
@@ -137,4 +193,11 @@ void NatController::startIntervalMode() {
   _intervalCount = 0;
   mode = MODE_INT;
   _intervalDelayStartMillis = millis();
+}
+
+void NatController::startAutoMode() {
+  mode = MODE_AUTO;
+  if(state) {
+    turnOff();
+  }
 }

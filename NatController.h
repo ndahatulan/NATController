@@ -25,7 +25,7 @@
 #define MODE_ON 1
 #define MODE_DUR 2 // Not yet implemented
 #define MODE_ML 3 // Not yet implemented
-#define MODE_AUTO 4 // Not yet implemented
+#define MODE_AUTO 4
 #define MODE_INT 5
 /*
 PWM
@@ -46,12 +46,17 @@ class NatController
   String name; // name for label
   int pwmDutyCycle = 255;
   int mode = MODE_OFF;
+  bool needModePublish = false;
   //unsigned int ptr_interval_on;
   //unsigned int ptr_interval_off;
   unsigned int intervalOn; 
   unsigned int intervalOff;
-  bool needModePublish = false;
-  unsigned int intervalDelayStart = 10;
+  unsigned int intervalDelayStart = 10; // Delay in seconds before starting the interval on
+  float autoValue = 2.00;
+  float autoMin = 1.00;
+  float autoMax = 3.00;
+  unsigned int autoDelayStart = 10; // Delay in seconds before starting the auto mode
+  unsigned long int autoTimeMax = 3600; // Maximum time in seconds that state is ON when auto mode.
 
   void loop();
   void turnOn();
@@ -63,7 +68,7 @@ class NatController
   unsigned long int getIntervalDuration();
   unsigned long int getIntervalDelayDuration();
   void startIntervalMode();
-  
+  void startAutoMode();
 	
   private:
   bool _pwmEnable = false;
@@ -74,6 +79,10 @@ class NatController
   unsigned int _intervalCount = 0;
   unsigned long int _intervalMillis;
   unsigned long int _intervalDelayStartMillis;
+  //unsigned int _autoCount;
+  bool _autoDelay; // true id on auto delay state
+  //unsigned long int _autoMillis;
+  unsigned long int _autoDelayStartMillis;
 		
 };
 
