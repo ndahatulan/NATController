@@ -23,9 +23,9 @@
 
 #define MODE_OFF 0
 #define MODE_ON 1
-#define MODE_DUR 2
-#define MODE_ML 3
-#define MODE_AUTO 4
+#define MODE_DUR 2 // Not yet implemented
+#define MODE_ML 3 // Not yet implemented
+#define MODE_AUTO 4 // Not yet implemented
 #define MODE_INT 5
 /*
 PWM
