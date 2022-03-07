@@ -63,6 +63,34 @@ void NatController::loop() {
         }
       }
     }
+
+    /* MODE  - 3*/
+    else if(mode == MODE_STEP) {
+      if(state) {
+        if(getDispensed() > stepValue) {
+          turnOff();
+          needStatePublish = true;
+          mode = MODE_OFF;
+          //pump1.offPump();
+          //publishPumpState();
+          //settings.PUMP1_MODE = PUMP1_MODE_OFF;
+          //pump1ProperOff();
+        }
+      }
+      else {
+        if(stepValue > 0) {
+          //_durationMillis = millis();
+          turnOn();
+          needStatePublish = true;
+          //pump1.onPump();
+          //publishPumpState();
+        }
+        else { // if stepValue = 0 Change to mode to OFF
+          mode = MODE_OFF;
+          needModePublish = true;
+        }
+      }
+    }
     
     /* MODE AUTO - 4*/
     else if(mode == MODE_AUTO) {
@@ -223,7 +251,13 @@ void NatController::startDurationMode() {
   if(state) {
     turnOff();
   }
-  //_durationMillis = millis();
+}
+
+void NatController::startStepMode() {
+  mode = MODE_STEP;
+  if(state) {
+    turnOff();
+  }
 }
 
 void NatController::startIntervalMode() {

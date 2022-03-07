@@ -12,8 +12,8 @@ NAT Controller for pumps.
 * OFF
 * DURATION - TURN ON on a specified time in seconds
 **   durationValue - Time in seconds to dispense
-
-* DISPENSE - Dispense per STEP. Not yet implemented.
+* STEP - Dispense by STEP
+**   stepValue - Turn ON by # of STEPS
 * INTERVAL - TURN ON or OFF on a specified time interval.
 **   startIntervalMode() - To trigger Interval Mode.
 **   intervalOn - Turn ON in seconds.

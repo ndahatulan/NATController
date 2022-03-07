@@ -23,8 +23,8 @@
 
 #define MODE_OFF 0
 #define MODE_ON 1
-#define MODE_DUR 2 // Not yet implemented
-#define MODE_ML 3 // Not yet implemented
+#define MODE_DUR 2 // TURN ON by duration in seconds
+#define MODE_STEP 3 // Turn ON by # of STEPS
 #define MODE_AUTO 4
 #define MODE_INT 5
 /*
@@ -51,6 +51,7 @@ class NatController
   //unsigned int ptr_interval_on;
   //unsigned int ptr_interval_off;
   unsigned int durationValue;
+  unsigned int stepValue;
   unsigned int intervalOn; 
   unsigned int intervalOff;
   unsigned int intervalDelayStart = 10; // Delay in seconds before starting the interval on
@@ -69,6 +70,7 @@ class NatController
   void setSpeed(int percentage);
   unsigned long int getIntervalDuration();
   unsigned long int getIntervalDelayDuration();
+  void startStepMode();
   void startDurationMode();
   void startIntervalMode();
   void startAutoMode();

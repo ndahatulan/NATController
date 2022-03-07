@@ -82,6 +82,8 @@ void loop() {
   Serial.print(pump1.mode);
   Serial.print(" S1 State: ");
   Serial.print(pump1.state);
+  Serial.print(" stepvalue1: ");
+  Serial.print(pump1.stepValue);
   Serial.print(" durationvalue1: ");
   Serial.print(pump1.durationValue);
   Serial.print(" autovalue1: ");
@@ -148,7 +150,7 @@ void checkSerialInput() {
           pump1.startDurationMode();
         }
         else if(number == 13) {
-          
+          pump1.startStepMode();
         }
         else if(number == 14) {
         //pump1.mode = MODE_AUTO;
@@ -179,6 +181,12 @@ void checkSerialInput() {
         Serial.println(pump1.mode);
       }
 
+      else if (command == "stepvalue1") {
+        pump1.stepValue = commandValue.toFloat();
+        Serial.print("stepvalue1: ");
+        Serial.println(pump1.stepValue);
+      }
+      
       else if (command == "durationvalue1") {
         pump1.durationValue = commandValue.toFloat();
         Serial.print("durationvalue1: ");
