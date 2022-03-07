@@ -47,8 +47,10 @@ class NatController
   int pwmDutyCycle = 255;
   int mode = MODE_OFF;
   bool needModePublish = false;
+  bool needStatePublish = false;
   //unsigned int ptr_interval_on;
   //unsigned int ptr_interval_off;
+  unsigned int durationValue;
   unsigned int intervalOn; 
   unsigned int intervalOff;
   unsigned int intervalDelayStart = 10; // Delay in seconds before starting the interval on
@@ -62,11 +64,12 @@ class NatController
   void turnOn();
   void turnOff();
   unsigned long int getDuration(); // Get current duration. millis - the startMillis.
-  unsigned long int getDispensed();
+  unsigned long int getDispensed(); // 
   unsigned long int getLastDispensed();
   void setSpeed(int percentage);
   unsigned long int getIntervalDuration();
   unsigned long int getIntervalDelayDuration();
+  void startDurationMode();
   void startIntervalMode();
   void startAutoMode();
 	
@@ -75,7 +78,9 @@ class NatController
   uint8_t _pwmCh = 0;
   unsigned long int _pinControl; // Pin number to switch Pump
   unsigned long int _lastDispensed;
-  unsigned long int _startMillis = 0; // duration in millis since the pump started
+
+  //unsigned long int _durationMillis;
+  unsigned long int _startMillis = 0; // start duration in millis when turn ON
   unsigned int _intervalCount = 0;
   unsigned long int _intervalMillis;
   unsigned long int _intervalDelayStartMillis;

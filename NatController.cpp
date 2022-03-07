@@ -35,6 +35,35 @@ void NatController::loop() {
          // Do here after off
       }
     }
+
+    /* MODE  - 2*/
+    else if(mode == MODE_DUR) {
+      if(state) {
+        if(getDuration() > durationValue * 1000) {
+          turnOff();
+          needStatePublish = true;
+          mode = MODE_OFF;
+          //pump1.offPump();
+          //publishPumpState();
+          //settings.PUMP1_MODE = PUMP1_MODE_OFF;
+          //pump1ProperOff();
+        }
+      }
+      else {
+        if(durationValue > 0) {
+          //_durationMillis = millis();
+          turnOn();
+          needStatePublish = true;
+          //pump1.onPump();
+          //publishPumpState();
+        }
+        else { // if durationValue = 0 Change to mode to OFF
+          mode = MODE_OFF;
+          needModePublish = true;
+        }
+      }
+    }
+    
     /* MODE AUTO - 4*/
     else if(mode == MODE_AUTO) {
       if(autoValue <= autoMin && state == false) { // if autoValue is out of range and state is off
@@ -189,8 +218,19 @@ void NatController::setSpeed(int percentage){
   pwmDutyCycle = map(percentage, 0,100, 0, 255);
 }
 
+void NatController::startDurationMode() {
+  mode = MODE_DUR;
+  if(state) {
+    turnOff();
+  }
+  //_durationMillis = millis();
+}
+
 void NatController::startIntervalMode() {
   _intervalCount = 0;
+  if(state) {
+    turnOff();
+  }
   mode = MODE_INT;
   _intervalDelayStartMillis = millis();
 }

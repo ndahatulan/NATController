@@ -82,16 +82,18 @@ void loop() {
   Serial.print(pump1.mode);
   Serial.print(" S1 State: ");
   Serial.print(pump1.state);
-  Serial.print(" S1 autoValue: ");
+  Serial.print(" durationvalue1: ");
+  Serial.print(pump1.durationValue);
+  Serial.print(" autovalue1: ");
   Serial.print(pump1.autoValue);
-  Serial.print(" S1 autoMin: ");
+  Serial.print(" automin1: ");
   Serial.print(pump1.autoMin);
-  Serial.print(" S1 autoMax: ");
-  Serial.print(pump1.autoMax);
-  Serial.print(" S3 Mode: ");
-  Serial.print(pump3.mode);
-  Serial.print(" S3 State: ");
-  Serial.println(pump3.state);
+  Serial.print(" automax1: ");
+  Serial.println(pump1.autoMax);
+  //Serial.print(" S3 Mode: ");
+  //Serial.print(pump3.mode);
+  //Serial.print(" S3 State: ");
+  //Serial.println(pump3.state);
   display.display();
   
   delay(20);
@@ -142,12 +144,18 @@ void checkSerialInput() {
         else if(number == 10) {
           pump1.mode = MODE_OFF;
         }
+        else if(number == 12) {
+          pump1.startDurationMode();
+        }
+        else if(number == 13) {
+          
+        }
         else if(number == 14) {
         //pump1.mode = MODE_AUTO;
           pump1.startAutoMode();
         }
         else if (number == 15) {
-          pump1.mode = MODE_INT;
+          //pump1.mode = MODE_INT;
           pump1.startIntervalMode();
         }
         else if(number == 31) {
@@ -160,7 +168,7 @@ void checkSerialInput() {
           pump3.startAutoMode();
         }
         else if (number == 35) {
-          pump3.mode = MODE_INT;
+          //pump3.mode = MODE_INT;
           pump3.startIntervalMode();
         }
         else {
@@ -170,22 +178,28 @@ void checkSerialInput() {
         Serial.print("Pump 1 Mode: ");
         Serial.println(pump1.mode);
       }
+
+      else if (command == "durationvalue1") {
+        pump1.durationValue = commandValue.toFloat();
+        Serial.print("durationvalue1: ");
+        Serial.println(pump1.durationValue);
+      }
       
       else if (command == "autovalue1") {
         pump1.autoValue = commandValue.toFloat();
-        Serial.print("Pump 1 autoValue: ");
+        Serial.print("autovalue1: ");
         Serial.println(pump1.autoValue);
       }
       
       else if (command == "automin1") {
         pump1.autoMin = commandValue.toFloat();
-        Serial.print("Pump 1 autoMin: ");
+        Serial.print("automin1: ");
         Serial.println(pump1.autoMin);
       }
       
       else if (command == "automax1") {
         pump1.autoMax = commandValue.toFloat();
-        Serial.print("Pump 1 autoMax: ");
+        Serial.print("automax1: ");
         Serial.println(pump1.autoMax);
       }
 
