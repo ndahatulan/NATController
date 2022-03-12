@@ -25,8 +25,13 @@
 #define MODE_ON 1
 #define MODE_DUR 2 // TURN ON by duration in seconds
 #define MODE_STEP 3 // Turn ON by # of STEPS
-#define MODE_AUTO 4
-#define MODE_INT 5
+#define MODE_AUTO 4 // AUTO Water Level
+#define MODE_AWLV 4 // AUTO Water Level
+#define MODE_INT 5  // Interval Mode
+#define MODE_ATMP 6 // AUTO Temperature. Not Yet Implemented
+#define MODE_AHMD 7 // AUTO Humidity. Not Yet Implemented
+#define MODE_AWTP 8 // AUTO Water Temp
+
 /*
 PWM
 0 - 0 percent
@@ -74,6 +79,7 @@ class NatController
   void startDurationMode();
   void startIntervalMode();
   void startAutoMode();
+  void startAutoAWTPMode(); 
 	
   private:
   bool _pwmEnable = false;

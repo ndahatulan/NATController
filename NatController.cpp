@@ -93,7 +93,7 @@ void NatController::loop() {
     }
     
     /* MODE AUTO - 4*/
-    else if(mode == MODE_AUTO) {
+    else if(mode == MODE_AUTO || mode == MODE_AWTP) {
       if(autoValue <= autoMin && state == false) { // if autoValue is out of range and state is off
         if (!(autoMin == autoMax && autoValue == autoMin)) { // automin, automax and autovalue should not be equal
           if(_autoDelay == false) { // Start delay
@@ -271,6 +271,13 @@ void NatController::startIntervalMode() {
 
 void NatController::startAutoMode() {
   mode = MODE_AUTO;
+  if(state) {
+    turnOff();
+  }
+}
+
+void NatController::startAutoAWTPMode() {
+  mode = MODE_AWTP;
   if(state) {
     turnOff();
   }

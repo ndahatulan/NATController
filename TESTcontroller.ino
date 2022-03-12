@@ -153,12 +153,13 @@ void checkSerialInput() {
           pump1.startStepMode();
         }
         else if(number == 14) {
-        //pump1.mode = MODE_AUTO;
           pump1.startAutoMode();
         }
         else if (number == 15) {
-          //pump1.mode = MODE_INT;
           pump1.startIntervalMode();
+        }
+        else if (number == 18) {
+          pump1.startAutoAWTPMode(); 
         }
         else if(number == 31) {
           pump3.mode = MODE_ON;
@@ -170,7 +171,6 @@ void checkSerialInput() {
           pump3.startAutoMode();
         }
         else if (number == 35) {
-          //pump3.mode = MODE_INT;
           pump3.startIntervalMode();
         }
         else {
