@@ -55,10 +55,10 @@ class NatController
   bool needStatePublish = false;
   //unsigned int ptr_interval_on;
   //unsigned int ptr_interval_off;
-  unsigned int durationValue;
-  unsigned int stepValue;
-  unsigned int intervalOn; 
-  unsigned int intervalOff;
+  unsigned int durationValue = 30;
+  unsigned int stepValue = 1000;
+  unsigned int intervalOn = 60; // 1 minute
+  unsigned int intervalOff = 180; // 3 minutes
   unsigned int intervalDelayStart = 10; // Delay in seconds before starting the interval on
   float autoValue = 2.00;
   float autoMin = 1.00;
