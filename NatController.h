@@ -86,7 +86,7 @@ class NatController
   uint8_t _pwmCh = 0;
   unsigned long int _pinControl; // Pin number to switch Pump
   unsigned long int _lastDispensed;
-
+  
   //unsigned long int _durationMillis;
   unsigned long int _startMillis = 0; // start duration in millis when turn ON
   unsigned int _intervalCount = 0;
@@ -96,6 +96,7 @@ class NatController
   bool _autoDelay; // true id on auto delay state
   //unsigned long int _autoMillis;
   unsigned long int _autoDelayStartMillis;
+  bool _autoOnIncrease = true; // true: Turn ON to increase autoValue. false: autoMin > autoMax, Turn ON to decrease autoValue.
 		
 };
 

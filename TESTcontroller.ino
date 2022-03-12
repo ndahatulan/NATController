@@ -210,8 +210,6 @@ void checkSerialInput() {
         Serial.print("automax1: ");
         Serial.println(pump1.autoMax);
       }
-
-     
      //Serial.println(pump3.mode);
      //Reset for the next message
       message_pos = 0;

@@ -94,7 +94,19 @@ void NatController::loop() {
     
     /* MODE AUTO - 4*/
     else if(mode == MODE_AUTO || mode == MODE_AWTP) {
-      if(autoValue <= autoMin && state == false) { // if autoValue is out of range and state is off
+      float castnegative = 1;
+      if(_autoOnIncrease) {
+        /*
+        if(autoMin > autoMax) {
+          _autoOnIncrease = false;
+        }
+        */
+      }
+      else {
+        castnegative = -1;
+      }
+      //if (_autoOnIncrease) { // autoMax is greater than autoMin. sensor value is decreasing. e.g Water Level
+      if(autoValue*castnegative <= autoMin*castnegative && state == false) { // if autoValue is out of range and state is off
         if (!(autoMin == autoMax && autoValue == autoMin)) { // automin, automax and autovalue should not be equal
           if(_autoDelay == false) { // Start delay
             _autoDelayStartMillis = millis(); // Start timer for delay
@@ -110,10 +122,10 @@ void NatController::loop() {
           }
         }
       }
-      else if(autoValue > autoMin && state == false) {
+      else if(autoValue*castnegative > autoMin*castnegative && state == false) {
         _autoDelay = false;
       }
-      else if(autoValue >= autoMax && state == true) {
+      else if(autoValue*castnegative >= autoMax*castnegative && state == true) {
         turnOff();
         Serial.println("S1 turned OFF");
         Serial.print("_autoDelay: ");
@@ -125,8 +137,13 @@ void NatController::loop() {
         //Serial.print("Dispensed: "); 
         //Serial.println(pump1.getDispensed());
         // Send pump dispense if required
-        
       }
+
+
+      
+      //}
+
+
   
       if (state == true) { // If already reached maximum pump time, turn off PUMP
         if (getDuration() >= autoTimeMax*1000) {
@@ -142,6 +159,8 @@ void NatController::loop() {
           
         }
       }
+
+      
     }
     /* MODE INTERVAL - 5*/
     else if(mode == MODE_INT) {
@@ -270,6 +289,7 @@ void NatController::startIntervalMode() {
 }
 
 void NatController::startAutoMode() {
+  _autoOnIncrease = true; // Turn On will increase autoValue
   mode = MODE_AUTO;
   if(state) {
     turnOff();
@@ -277,6 +297,7 @@ void NatController::startAutoMode() {
 }
 
 void NatController::startAutoAWTPMode() {
+  _autoOnIncrease = false; // Turn On will decrease autoValue
   mode = MODE_AWTP;
   if(state) {
     turnOff();
