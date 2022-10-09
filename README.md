@@ -11,8 +11,11 @@ NAT Controller for pumps.
 * ON
 * OFF
 * DURATION - TURN ON on a specified time in seconds
+**   startDurationMode()
 **   durationValue - Time in seconds to dispense
+
 * STEP - Dispense by STEP
+**   startStepMode()
 **   stepValue - Turn ON by # of STEPS
 * INTERVAL - TURN ON or OFF on a specified time interval.
 **   startIntervalMode() - To trigger Interval Mode.
@@ -25,4 +28,5 @@ NAT Controller for pumps.
 **   float autoMin - If autoValue is <= autoMin, turn ON. If (autoValue = autoMin = autoMax), it will not turn ON.
 **   float autoMax - If autoValue is >= autoMax, turn OFF
 **   int autoDelayStart - Delay turn ON in seconds. default is 10 seconds.
-
+* AWTP - Auto Water Temperature
+**   startAutoAWTPMode()
