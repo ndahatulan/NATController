@@ -75,6 +75,7 @@ class NatController
   void setSpeed(int percentage);
   unsigned long int getIntervalDuration();
   unsigned long int getIntervalDelayDuration();
+  String getModeAliasString(); // Return OFF, ON, DUR, STEP, AWLV, INT, AWTP
   void startStepMode();
   void startDurationMode();
   void startIntervalMode();

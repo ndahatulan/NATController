@@ -261,6 +261,33 @@ unsigned long int NatController::getIntervalDelayDuration() {
   return (millis() - _intervalDelayStartMillis)/1000;
 }
 
+String NatController::getModeAliasString() {
+  if (mode == MODE_OFF) {
+    return "OFF";
+  }
+  else if(mode == MODE_ON) {
+    return "ON";
+  }
+  else if (mode == MODE_DUR) {
+    return "DUR";
+  }
+  else if (mode == MODE_STEP) {
+    return "STEP";
+  }
+  else if (mode == MODE_AWLV) {
+    return "AWLV";
+  }
+  else if (mode == MODE_INT) {
+    return "INT";
+  }
+  else if (mode == MODE_AWTP) {
+    return "AWTP";
+  }
+  else {
+    return "";
+  }
+}
+
 void NatController::setSpeed(int percentage){
   pwmDutyCycle = map(percentage, 0,100, 0, 255);
 }
